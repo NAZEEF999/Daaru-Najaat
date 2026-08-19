@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block og_image %}{% if product.image %}{{ product.image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/product-placeholder.jpg' %}{% endif %}{% endblock %}
+{% block content %}
+<section style="padding-top:8rem;padding-bottom:5rem;">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <a href="{% url 'api:products' %}" style="display:inline-flex;align-items:center;gap:.5rem;color:#5b6b5e;text-decoration:none;font-size:.875rem;margin-bottom:2rem;">&larr; Back to Products</a>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div>
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/product-placeholder.jpg' %}{% endif %}"
+             alt="{{ product.title }}" style="width:100%;border-radius:1.5rem;object-fit:cover;max-height:28rem;background:#faf1de;"/>
+      </div>
+
+      <div>
+        <span class="badge-gold" style="margin-bottom:1rem;display:inline-block;">{{ product.category }}</span>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.75rem,4vw,2.5rem);color:#14291D;font-weight:700;margin-bottom:1rem;">{{ product.title }}</h1>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:#3A7D44;font-weight:700;margin-bottom:1.5rem;">&#8358;{{ product.price|floatformat:0 }}</p>
+        <p class="muted-text" style="line-height:1.7;margin-bottom:2rem;">{{ product.description }}</p>
+
+        <div class="glass-card" style="padding:1.5rem;">
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:#14291D;font-weight:700;margin-bottom:1.25rem;">Send Order Enquiry</h3>
+          {% if messages %}
+            {% for message in messages %}
+            <div style="padding:.875rem;margin-bottom:1rem;border-radius:.6rem;background:#e9f4ea;border:1px solid rgba(58,125,68,.25);">
+              <p style="color:#2D5A27;font-size:.875rem;">{{ message }}</p>
+            </div>
+            {% endfor %}
+          {% endif %}
+          <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {% for field in form %}
+            <div>
+              <label style="display:block;font-size:.875rem;color:#3E4B41;margin-bottom:.375rem;">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+              {{ field }}
+              {% if field.errors %}<p style="color:#c0453d;font-size:.75rem;margin-top:.25rem;">{{ field.errors.0 }}</p>{% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">
+              Send Order Enquiry &rarr;
+            </button>
+            <p style="font-size:.75rem;color:#8fa298;text-align:center;">No online payment. We will contact you to arrange delivery.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

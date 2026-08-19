@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section style="position:relative;background:#14291D;padding-top:9rem;padding-bottom:4rem;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:url('{% static "img/products-hero.jpg" %}');background-size:cover;background-position:center;opacity:.18;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,41,29,.3),#14291D 90%);"></div>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="position:relative;">
+    <span style="color:#9fb3a4;font-size:.85rem;">Home / Products</span>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.25rem,5vw,3.5rem);color:#FFFFFF;font-weight:700;margin-top:.75rem;">Our Products</h1>
+    <p style="color:#9fb3a4;max-width:36rem;margin:1rem auto 0;">Traditional herbal remedies crafted with ancient wisdom. Browse, enquire, and our team contacts you to arrange delivery.</p>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if products %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for product in products %}
+      <div class="glass-card reveal" style="display:flex;flex-direction:column;overflow:hidden;">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/product-placeholder.jpg' %}{% endif %}"
+             alt="{{ product.title }}" style="width:100%;height:14rem;object-fit:cover;background:#faf1de;"/>
+        <div style="padding:1.5rem;flex:1;display:flex;flex-direction:column;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+            <span class="badge-gold">{{ product.category }}</span>
+            {% if product.is_featured %}<span class="badge-green">Featured</span>{% endif %}
+          </div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.375rem;color:#14291D;font-weight:700;margin-bottom:.75rem;">{{ product.title }}</h3>
+          <p class="muted-text" style="font-size:.875rem;line-height:1.6;flex:1;">{{ product.short_description }}</p>
+          <div style="margin-top:1.25rem;display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#3A7D44;font-weight:700;">&#8358;{{ product.price|floatformat:0 }}</span>
+            <a href="{% url 'api:product_detail' product.slug %}" class="btn-primary" style="padding:.5rem 1rem;font-size:.875rem;">Order</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:5rem 0;">
+      <p class="muted-text">No products available at the moment.</p>
+    </div>
+    {% endif %}
+
+    <div class="glass-card" style="padding:1.5rem;margin-top:3rem;text-align:center;">
+      <p class="muted-text" style="font-size:.875rem;"><strong style="color:#14291D;">Note:</strong> All products are traditional herbal preparations. No online payment — we contact you to arrange delivery and payment offline.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

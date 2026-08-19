@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block og_image %}{% if healer.photo %}{{ healer.photo.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/healer-placeholder.jpg' %}{% endif %}{% endblock %}
+{% block content %}
+<section style="padding-top:8rem;padding-bottom:5rem;">
+  <div style="max-width:42rem;margin:0 auto;padding:0 1rem;">
+    <a href="{% url 'api:healers' %}" style="display:inline-flex;align-items:center;gap:.5rem;color:#5b6b5e;text-decoration:none;font-size:.875rem;margin-bottom:2rem;">&larr; Back to Healers</a>
+
+    <div class="glass-card" style="padding:2.5rem;">
+      <div style="display:flex;flex-direction:column;gap:2rem;">
+        <div style="display:flex;flex-direction:row;gap:1.75rem;align-items:flex-start;flex-wrap:wrap;">
+          <div style="flex-shrink:0;">
+            <img src="{% if healer.photo %}{{ healer.photo.url }}{% else %}{% static 'img/healer-placeholder.jpg' %}{% endif %}"
+                 alt="{{ healer.full_name }}" style="width:8rem;height:8rem;border-radius:1rem;object-fit:cover;border:2px solid #e9f4ea;display:block;background:#e9f4ea;"/>
+            {% if healer.is_featured %}
+            <div class="badge-gold" style="margin-top:.75rem;">Featured Healer</div>
+            {% endif %}
+          </div>
+
+          <div style="flex:1;min-width:0;">
+            <h1 style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:#14291D;font-weight:700;margin-bottom:.25rem;line-height:1.2;">{{ healer.full_name }}</h1>
+            <p style="color:#3A7D44;margin-bottom:1rem;font-size:.9375rem;font-weight:500;">{{ healer.specialty }}</p>
+
+            <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.25rem;">
+              <span class="badge-green">{{ healer.experience_years }}+ years experience</span>
+              {% for lang in healer.language_list %}
+              <span class="badge-sage">{{ lang }}</span>
+              {% endfor %}
+            </div>
+
+            <p class="muted-text" style="line-height:1.7;font-size:.9375rem;">{{ healer.bio }}</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:.75rem;">
+          <a href="{% url 'api:book' %}" class="btn-primary">Book with {{ healer.full_name|truncatechars:15 }}</a>
+          {% if healer.whatsapp_number %}
+          <a href="https://wa.me/{{ healer.whatsapp_number }}?text=Salaam! I would like to book a session with {{ healer.full_name }}." target="_blank" class="btn-ghost">WhatsApp</a>
+          {% endif %}
+          {% if healer.phone %}
+          <a href="tel:{{ healer.phone }}" class="btn-ghost">Call</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

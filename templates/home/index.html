@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- ═══ HERO ═══ -->
+<section style="position:relative;background:#14291D;padding-top:9rem;padding-bottom:4rem;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:url('{% static "img/hero-home.jpg" %}');background-size:cover;background-position:center;opacity:.22;"
+       onerror="this.style.display='none'"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(115deg,#14291D 40%,rgba(20,41,29,.5) 100%);"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full" style="position:relative;">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="animate-fade-up" style="display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border-radius:9999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#cfe0d3;font-size:.8rem;margin-bottom:1.5rem;">
+          {{ site.tagline|default:"Tradomedical Healing Home" }}
+        </span>
+        <h1 class="animate-fade-up" style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,4rem);line-height:1.1;color:#FFFFFF;font-weight:700;margin-bottom:1.25rem;">{{ site.hero_headline }}</h1>
+        <p class="animate-fade-up" style="color:#cfe0d3;font-size:1.125rem;line-height:1.7;max-width:34rem;margin-bottom:2rem;">{{ site.hero_subheadline }}</p>
+        <div class="flex flex-wrap gap-4 animate-fade-up" style="margin-bottom:2.5rem;">
+          <a href="{% url 'api:book' %}" class="btn-primary">{{ site.hero_cta_secondary|default:"Book Appointment" }} &rarr;</a>
+          {% if site.whatsapp_number %}
+          <a href="https://wa.me/{{ site.whatsapp_number }}?text={{ site.whatsapp_greeting|urlencode }}" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:.5rem;font-weight:500;color:#FFFFFF;border:1px solid rgba(255,255,255,.3);text-decoration:none;">
+            Chat on WhatsApp
+          </a>
+          {% else %}
+          <a href="{% url 'api:services' %}" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:.5rem;font-weight:500;color:#FFFFFF;border:1px solid rgba(255,255,255,.3);text-decoration:none;">
+            {{ site.hero_cta_primary|default:"Explore Services" }}
+          </a>
+          {% endif %}
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 animate-fade-up">
+          {% for label, sub in trust_indicators %}
+          <div>
+            <div style="color:#8fe3a3;font-size:.8rem;font-weight:600;">{{ label }}</div>
+            <div style="color:#9fb3a4;font-size:.72rem;margin-top:.15rem;">{{ sub }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="flex justify-center lg:justify-end">
+        <div class="glass-card animate-float" style="padding:2rem;border-radius:1.5rem;max-width:20rem;">
+          <img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'img/logo.jpeg' %}{% endif %}"
+               alt="{{ site.site_name }} logo" style="width:11rem;height:11rem;object-fit:contain;border-radius:1rem;margin:0 auto;display:block;"/>
+          <div style="margin-top:1.25rem;text-align:center;">
+            <p style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#14291D;font-weight:600;">{{ site.site_name }}</p>
+            <p class="muted-text" style="font-size:.85rem;margin-top:.25rem;">{{ site.tagline }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT PREVIEW ═══ -->
+<section class="section-padding">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="reveal" style="position:relative;">
+        <img src="{% static 'img/about-main.jpg' %}" alt="{{ site.site_name }} healing practice"
+             style="width:100%;border-radius:1.25rem;object-fit:cover;aspect-ratio:4/3;background:linear-gradient(135deg,#e9f4ea,#faf1de);"
+             onerror="this.style.background='linear-gradient(135deg,#e9f4ea,#faf1de)';this.src='';this.style.minHeight='20rem';"/>
+      </div>
+      <div class="reveal">
+        <span class="section-eyebrow">About Us</span>
+        <h2 class="section-title" style="margin-top:1rem;margin-bottom:1.25rem;">{{ site.about_title }}</h2>
+        <p class="muted-text" style="font-size:1.05rem;line-height:1.75;margin-bottom:1.5rem;">{{ site.about_description }}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" style="margin-bottom:1.75rem;">
+          <div class="glass-card" style="padding:1.25rem;">
+            <h4 style="font-weight:700;color:#14291D;font-size:.95rem;margin-bottom:.4rem;">Our Mission</h4>
+            <p class="muted-text" style="font-size:.85rem;line-height:1.6;">{{ site.about_mission }}</p>
+          </div>
+          <div class="glass-card" style="padding:1.25rem;">
+            <h4 style="font-weight:700;color:#14291D;font-size:.95rem;margin-bottom:.4rem;">Our Vision</h4>
+            <p class="muted-text" style="font-size:.85rem;line-height:1.6;">{{ site.about_vision }}</p>
+          </div>
+        </div>
+        <a href="{% url 'api:about' %}" class="btn-primary">Learn More About Us &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SERVICES ═══ -->
+{% if featured_services %}
+<section class="section-padding" style="background:#F4F2EA;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center reveal" style="margin-bottom:3rem;">
+      <span class="section-eyebrow">What We Offer</span>
+      <h2 class="section-title" style="margin-top:1rem;">Our Healing Services</h2>
+      <p class="muted-text" style="max-width:36rem;margin:1rem auto 0;">Traditional and herbal healthcare services tailored to your needs.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for service in featured_services %}
+      <div class="glass-card reveal" style="overflow:hidden;display:flex;flex-direction:column;">
+        <img src="{% if service.image %}{{ service.image.url }}{% else %}{% static 'img/service-placeholder.jpg' %}{% endif %}"
+             alt="{{ service.title }}" style="width:100%;height:11rem;object-fit:cover;background:#e9f4ea;"
+             onerror="this.style.background='#e9f4ea';this.src='';"/>
+        <div style="padding:1.5rem;display:flex;flex-direction:column;flex:1;">
+          <span class="badge-gold" style="align-self:flex-start;margin-bottom:.6rem;">{{ service.get_category_display }}</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:#14291D;font-weight:700;margin-bottom:.6rem;">{{ service.title }}</h3>
+          <p class="muted-text" style="font-size:.875rem;line-height:1.6;flex:1;">{{ service.short_description }}</p>
+          <div style="margin-top:1.25rem;display:flex;align-items:center;justify-content:space-between;">
+            <a href="{% url 'api:service_detail' service.slug %}" style="color:#3A7D44;font-size:.875rem;font-weight:600;text-decoration:none;">Learn More &rarr;</a>
+            <a href="{% url 'api:book' %}?service={{ service.slug }}" class="btn-ghost" style="padding:.4rem .9rem;font-size:.78rem;">Book</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center reveal" style="margin-top:3rem;"><a href="{% url 'api:services' %}" class="btn-ghost">View All Services &rarr;</a></div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ═══ FEATURED PRODUCTS ═══ -->
+{% if featured_products %}
+<section class="section-padding">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between reveal" style="margin-bottom:3rem;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <span class="section-eyebrow">Herbal Products</span>
+        <h2 class="section-title" style="margin-top:1rem;">Featured Products</h2>
+      </div>
+      <a href="{% url 'api:products' %}" class="btn-ghost">View All Products &rarr;</a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for product in featured_products %}
+      <div class="glass-card reveal" style="overflow:hidden;display:flex;flex-direction:column;">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/product-placeholder.jpg' %}{% endif %}"
+             alt="{{ product.title }}" style="width:100%;height:9rem;object-fit:cover;background:#faf1de;"
+             onerror="this.style.background='#faf1de';this.src='';"/>
+        <div style="padding:1.1rem;flex:1;display:flex;flex-direction:column;">
+          <h3 style="font-weight:700;color:#14291D;font-size:.95rem;margin-bottom:.35rem;">{{ product.title }}</h3>
+          <p class="muted-text" style="font-size:.78rem;line-height:1.5;flex:1;">{{ product.short_description|truncatechars:60 }}</p>
+          <div style="margin-top:.9rem;display:flex;align-items:center;justify-content:space-between;">
+            <span style="color:#3A7D44;font-weight:700;font-size:.9rem;">&#8358;{{ product.price|floatformat:0 }}</span>
+            <a href="{% url 'api:product_detail' product.slug %}" style="color:#3A7D44;font-size:.78rem;text-decoration:none;font-weight:600;">View &rarr;</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ═══ HEALERS ═══ -->
+{% if featured_healers %}
+<section class="section-padding" style="background:#F4F2EA;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center reveal" style="margin-bottom:3rem;">
+      <span class="section-eyebrow">Our Team</span>
+      <h2 class="section-title" style="margin-top:1rem;">Meet Our Healers</h2>
+      <p class="muted-text" style="max-width:36rem;margin:1rem auto 0;">Experienced and trusted traditional healers dedicated to your wellbeing.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for healer in featured_healers %}
+      <div class="glass-card reveal" style="overflow:hidden;text-align:center;">
+        <img src="{% if healer.photo %}{{ healer.photo.url }}{% else %}{% static 'img/healer-placeholder.jpg' %}{% endif %}"
+             alt="{{ healer.full_name }}" style="width:100%;height:12rem;object-fit:cover;background:#e9f4ea;"
+             onerror="this.style.background='#e9f4ea';this.src='';"/>
+        <div style="padding:1.25rem;">
+          <h3 style="font-weight:700;color:#14291D;font-size:1rem;margin-bottom:.25rem;">{{ healer.full_name }}</h3>
+          <p style="color:#3A7D44;font-size:.8rem;font-weight:500;margin-bottom:.25rem;">{{ healer.specialty }}</p>
+          {% if healer.experience_years %}<p class="muted-text" style="font-size:.75rem;margin-bottom:.9rem;">{{ healer.experience_years }}+ Years Experience</p>{% endif %}
+          <a href="{% url 'api:healer_detail' healer.pk %}" class="btn-ghost" style="width:100%;justify-content:center;padding:.5rem;font-size:.8rem;">View Profile</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center reveal" style="margin-top:3rem;"><a href="{% url 'api:healers' %}" class="btn-ghost">Meet All Our Healers &rarr;</a></div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ═══ TRUST STATS (real counts only) ═══ -->
+<section style="background:#14291D;padding:3.5rem 0;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      {% if stats.healers %}
+      <div><div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#FFFFFF;font-weight:700;">{{ stats.healers }}+</div><div style="color:#9fb3a4;font-size:.8rem;margin-top:.25rem;">Expert Healers</div></div>
+      {% endif %}
+      {% if stats.services %}
+      <div><div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#FFFFFF;font-weight:700;">{{ stats.services }}+</div><div style="color:#9fb3a4;font-size:.8rem;margin-top:.25rem;">Healing Services</div></div>
+      {% endif %}
+      {% if stats.products %}
+      <div><div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#FFFFFF;font-weight:700;">{{ stats.products }}+</div><div style="color:#9fb3a4;font-size:.8rem;margin-top:.25rem;">Herbal Products</div></div>
+      {% endif %}
+      <div><div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#FFFFFF;font-weight:700;">100%</div><div style="color:#9fb3a4;font-size:.8rem;margin-top:.25rem;">Traditional &amp; Natural</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+{% if testimonials %}
+<section class="section-padding">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center reveal" style="margin-bottom:3rem;">
+      <span class="section-eyebrow">Testimonials</span>
+      <h2 class="section-title" style="margin-top:1rem;">Lives Transformed</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for t in testimonials %}
+      <div class="glass-card reveal" style="padding:1.5rem;">
+        <div style="display:flex;gap:.2rem;margin-bottom:.9rem;">
+          {% for i in "12345" %}
+          <span style="color:{% if forloop.counter <= t.rating %}#C49A3C{% else %}#e6ddc8{% endif %};">&#9733;</span>
+          {% endfor %}
+        </div>
+        <p class="muted-text" style="font-size:.9rem;line-height:1.7;font-style:italic;margin-bottom:1.1rem;">&ldquo;{{ t.content|truncatechars:180 }}&rdquo;</p>
+        <p style="color:#14291D;font-size:.9rem;font-weight:600;">{{ t.name }}</p>
+        {% if t.location %}<p class="muted-text" style="font-size:.78rem;">{{ t.location }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ═══ BLOG PREVIEW ═══ -->
+{% if recent_posts %}
+<section class="section-padding" style="background:#F4F2EA;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between reveal" style="margin-bottom:3rem;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <span class="section-eyebrow">Healing Blog</span>
+        <h2 class="section-title" style="margin-top:1rem;">Healing Wisdom &amp; Articles</h2>
+      </div>
+      <a href="{% url 'api:blog' %}" class="btn-ghost">View All Articles &rarr;</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for post in recent_posts %}
+      <a href="{% url 'api:blog_detail' post.slug %}" class="glass-card reveal" style="display:flex;flex-direction:column;text-decoration:none;overflow:hidden;">
+        <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static 'img/blog-placeholder.jpg' %}{% endif %}"
+             alt="{{ post.title }}" style="width:100%;height:11rem;object-fit:cover;background:#e9f4ea;"
+             onerror="this.style.background='#e9f4ea';this.src='';"/>
+        <div style="padding:1.25rem;flex:1;display:flex;flex-direction:column;">
+          {% if post.category %}<span class="badge-green" style="align-self:flex-start;margin-bottom:.6rem;">{{ post.category }}</span>{% endif %}
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#14291D;font-weight:700;margin-bottom:.6rem;">{{ post.title }}</h3>
+          <p class="muted-text" style="font-size:.82rem;line-height:1.6;flex:1;">{{ post.excerpt|truncatechars:110 }}</p>
+          <div style="margin-top:1rem;padding-top:.75rem;border-top:1px solid #E6ECE8;display:flex;justify-content:space-between;">
+            <span class="muted-text" style="font-size:.72rem;">{{ post.published_at|default:post.created_at|date:"M j, Y" }}</span>
+            <span style="color:#3A7D44;font-size:.8rem;font-weight:600;">Read More &rarr;</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ═══ EXPLORE MORE ═══ -->
+<section class="section-padding">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center reveal" style="margin-bottom:3rem;">
+      <span class="section-eyebrow">Explore More</span>
+      <h2 class="section-title" style="margin-top:1rem;">Find What You Need</h2>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+      {% for label, url, icon_path in explore_links %}
+      <a href="{{ url }}" class="glass-card reveal" style="padding:1.5rem;display:flex;align-items:center;gap:1rem;text-decoration:none;">
+        <div style="width:2.75rem;height:2.75rem;border-radius:.7rem;background:#e9f4ea;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A7D44" stroke-width="2"><path d="{{ icon_path }}"/></svg>
+        </div>
+        <span style="font-weight:600;color:#14291D;font-size:.9rem;">{{ label }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINAL CTA ═══ -->
+<section style="background:#14291D;padding:5rem 0;">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.75rem,4vw,2.75rem);color:#FFFFFF;font-weight:700;margin-bottom:1.25rem;">Ready to Begin Your Healing Journey?</h2>
+    <p style="color:#9fb3a4;font-size:1.05rem;line-height:1.7;margin-bottom:2.25rem;max-width:36rem;margin-left:auto;margin-right:auto;">Whether you're facing a physical ailment, spiritual challenge, or emotional burden — our experienced healers are here to help.</p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="{% url 'api:book' %}" class="btn-primary">Book Appointment &rarr;</a>
+      {% if site.whatsapp_number %}
+      <a href="https://wa.me/{{ site.whatsapp_number }}?text={{ site.whatsapp_greeting|urlencode }}" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:.5rem;font-weight:500;color:#FFFFFF;border:1px solid rgba(255,255,255,.3);text-decoration:none;">
+        WhatsApp Us
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

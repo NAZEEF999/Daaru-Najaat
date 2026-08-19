@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<section style="padding-top:8rem;padding-bottom:5rem;display:flex;align-items:center;justify-content:center;min-height:80vh;">
+  <div class="glass-card" style="padding:3rem;border-radius:1.5rem;max-width:32rem;width:100%;margin:0 1rem;text-align:center;">
+    <div style="width:4rem;height:4rem;border-radius:50%;background:rgba(58,125,68,.2);border:2px solid rgba(58,125,68,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;">
+      <svg style="width:2rem;height:2rem;color:#3A7D44;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:#D4E8D6;margin-bottom:.75rem;">Order Received!</h1>
+    <p style="color:#A0B5A3;margin-bottom:.5rem;">Your order for <strong style="color:#E8F0E9;">{{ order.product_name }}</strong> has been received.</p>
+    <p style="color:#A0B5A3;margin-bottom:1.5rem;font-size:.875rem;">Quantity: {{ order.quantity }} &middot; Total: NGN {{ order.total|floatformat:0 }}</p>
+    <p style="color:#A0B5A3;margin-bottom:2rem;">Our team will contact you at <strong style="color:#E8F0E9;">{{ order.customer_phone }}</strong> to arrange payment and delivery.</p>
+    {% if wa_url %}
+    <p style="color:#A0B5A3;font-size:.875rem;margin-bottom:1.5rem;">The admin has been notified via WhatsApp automatically.</p>
+    {% endif %}
+    <a href="{% url 'api:products' %}" class="btn-primary">Browse More Products</a>
+  </div>
+</section>
+{% endblock %}

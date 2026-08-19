@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section style="position:relative;background:#14291D;padding-top:9rem;padding-bottom:4rem;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:url('{% static "img/healers-hero.jpg" %}');background-size:cover;background-position:center;opacity:.18;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,41,29,.3),#14291D 90%);"></div>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="position:relative;">
+    <span style="color:#9fb3a4;font-size:.85rem;">Home / Healers</span>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.25rem,5vw,3.5rem);color:#FFFFFF;font-weight:700;margin-top:.75rem;">Our Healers</h1>
+    <p style="color:#9fb3a4;max-width:36rem;margin:1rem auto 0;">Experienced and trusted traditional healers dedicated to restoring your balance and wellness.</p>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if healers %}
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;align-items:start;">
+      {% for healer in healers %}
+      <div class="glass-card reveal" style="padding:2rem;display:flex;flex-direction:column;align-items:center;text-align:center;">
+
+        <div style="position:relative;margin-bottom:1.25rem;flex-shrink:0;">
+          <img src="{% if healer.photo %}{{ healer.photo.url }}{% else %}{% static 'img/healer-placeholder.jpg' %}{% endif %}"
+               alt="{{ healer.full_name }}" style="width:6rem;height:6rem;border-radius:50%;object-fit:cover;border:2px solid #e9f4ea;display:block;background:#e9f4ea;"/>
+          {% if healer.is_featured %}
+          <div style="position:absolute;top:-.25rem;right:-.25rem;width:1.5rem;height:1.5rem;border-radius:50%;background:#C49A3C;display:flex;align-items:center;justify-content:center;">
+            <svg style="width:.75rem;height:.75rem;fill:white;" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          {% endif %}
+        </div>
+
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.375rem;color:#14291D;font-weight:700;margin-bottom:.25rem;">{{ healer.full_name }}</h3>
+        <p style="color:#3A7D44;font-size:.875rem;font-weight:500;margin-bottom:.875rem;">{{ healer.specialty }}</p>
+
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin-bottom:1rem;">
+          <span class="badge-green">{{ healer.experience_years }}+ yrs</span>
+          {% for lang in healer.language_list %}
+          <span class="badge-sage">{{ lang }}</span>
+          {% endfor %}
+        </div>
+
+        <p class="muted-text" style="font-size:.875rem;line-height:1.6;margin-bottom:1.5rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">{{ healer.bio }}</p>
+
+        <div style="width:100%;display:flex;flex-direction:column;gap:.5rem;margin-top:auto;">
+          <a href="{% url 'api:healer_detail' healer.pk %}" class="btn-ghost" style="justify-content:center;">View Profile</a>
+          <a href="{% url 'api:book' %}" class="btn-primary" style="justify-content:center;">Book Session</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:5rem 0;">
+      <p class="muted-text" style="margin-bottom:1.5rem;">Our healer profiles are being updated. Please contact us directly.</p>
+      <a href="{% url 'api:contact' %}" class="btn-primary">Contact Us</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
