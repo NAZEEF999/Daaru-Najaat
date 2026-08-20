@@ -2,19 +2,40 @@
 {% block title %}Site Settings{% endblock %}
 {% block page_title %}Site Settings{% endblock %}
 {% block content %}
+{% if form.errors %}
+<div class="card" style="margin-bottom:1.25rem;border-left:4px solid var(--danger);">
+  <p style="color:var(--danger);font-weight:600;font-size:.9rem;margin-bottom:.5rem;">Please fix the following before saving:</p>
+  <ul style="margin:0;padding-left:1.2rem;">
+    {% for field in form %}
+      {% for error in field.errors %}
+      <li style="color:var(--danger);font-size:.85rem;">{{ field.label }}: {{ error }}</li>
+      {% endfor %}
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
 <form method="post" enctype="multipart/form-data" style="max-width:44rem;">
   {% csrf_token %}
 
   <div class="card" style="margin-bottom:1.25rem;">
     <div class="card-header"><span class="card-title">Contact &amp; Branding</span></div>
-    <div class="form-group"><label class="form-label">Site Name</label>{{ form.site_name }}</div>
-    <div class="form-group"><label class="form-label">Tagline</label>{{ form.tagline }}</div>
+    <div class="form-group">
+      <label class="form-label">Site Name</label>{{ form.site_name }}
+      {% if form.site_name.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.site_name.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tagline</label>{{ form.tagline }}
+      {% if form.tagline.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.tagline.errors.0 }}</p>{% endif %}
+    </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
       <div class="form-group">
         <label class="form-label">Contact Phone</label>{{ form.contact_phone }}
         {% if form.contact_phone.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.contact_phone.errors.0 }}</p>{% endif %}
       </div>
-      <div class="form-group"><label class="form-label">Contact Phone 2 (optional)</label>{{ form.contact_phone2 }}</div>
+      <div class="form-group">
+        <label class="form-label">Contact Phone 2 (optional)</label>{{ form.contact_phone2 }}
+        {% if form.contact_phone2.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.contact_phone2.errors.0 }}</p>{% endif %}
+      </div>
     </div>
     <div class="form-group">
       <label class="form-label">WhatsApp Number (digits only, e.g. 2348012345678)</label>{{ form.whatsapp_number }}
@@ -23,55 +44,139 @@
         This is the number every "Notify via WhatsApp" button across the site and dashboard sends to — changing it here updates everywhere at once.
       </p>
     </div>
-    <div class="form-group"><label class="form-label">Contact Email</label>{{ form.contact_email }}</div>
-    <div class="form-group"><label class="form-label">Address</label>{{ form.address }}</div>
+    <div class="form-group">
+      <label class="form-label">WhatsApp Greeting Message</label>{{ form.whatsapp_greeting }}
+      {% if form.whatsapp_greeting.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.whatsapp_greeting.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contact Email</label>{{ form.contact_email }}
+      {% if form.contact_email.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.contact_email.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">Address</label>{{ form.address }}
+      {% if form.address.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.address.errors.0 }}</p>{% endif %}
+    </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-      <div class="form-group"><label class="form-label">City</label>{{ form.city }}</div>
-      <div class="form-group"><label class="form-label">Country</label>{{ form.country }}</div>
+      <div class="form-group">
+        <label class="form-label">City</label>{{ form.city }}
+        {% if form.city.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.city.errors.0 }}</p>{% endif %}
+      </div>
+      <div class="form-group">
+        <label class="form-label">Country</label>{{ form.country }}
+        {% if form.country.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.country.errors.0 }}</p>{% endif %}
+      </div>
     </div>
   </div>
 
   <div class="card" style="margin-bottom:1.25rem;">
     <div class="card-header"><span class="card-title">Branding &amp; Media</span></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-      <div class="form-group"><label class="form-label">Logo</label>{{ form.logo }}
-        {% if form.instance.logo %}<img src="{{ form.instance.logo.url }}" style="height:2.5rem;margin-top:.5rem;">{% endif %}</div>
-      <div class="form-group"><label class="form-label">Favicon</label>{{ form.favicon }}</div>
+      <div class="form-group">
+        <label class="form-label">Logo</label>{{ form.logo }}
+        {% if form.logo.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.logo.errors.0 }}</p>{% endif %}
+        {% if form.instance.logo %}<img src="{{ form.instance.logo.url }}" style="height:2.5rem;margin-top:.5rem;">{% endif %}
+      </div>
+      <div class="form-group">
+        <label class="form-label">Favicon</label>{{ form.favicon }}
+        {% if form.favicon.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.favicon.errors.0 }}</p>{% endif %}
+      </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;">
-      <div class="form-group"><label class="form-label">Primary Color</label>{{ form.primary_color }}</div>
-      <div class="form-group"><label class="form-label">Secondary Color</label>{{ form.secondary_color }}</div>
-      <div class="form-group"><label class="form-label">Accent Color</label>{{ form.accent_color }}</div>
+      <div class="form-group">
+        <label class="form-label">Primary Color</label>{{ form.primary_color }}
+        {% if form.primary_color.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.primary_color.errors.0 }}</p>{% endif %}
+      </div>
+      <div class="form-group">
+        <label class="form-label">Secondary Color</label>{{ form.secondary_color }}
+        {% if form.secondary_color.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.secondary_color.errors.0 }}</p>{% endif %}
+      </div>
+      <div class="form-group">
+        <label class="form-label">Accent Color</label>{{ form.accent_color }}
+        {% if form.accent_color.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.accent_color.errors.0 }}</p>{% endif %}
+      </div>
     </div>
   </div>
 
   <div class="card" style="margin-bottom:1.25rem;">
     <div class="card-header"><span class="card-title">Homepage &amp; SEO</span></div>
-    <div class="form-group"><label class="form-label">Hero Headline</label>{{ form.hero_headline }}</div>
-    <div class="form-group"><label class="form-label">Hero Subheadline</label>{{ form.hero_subheadline }}</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-      <div class="form-group"><label class="form-label">Primary CTA Text</label>{{ form.hero_cta_primary }}</div>
-      <div class="form-group"><label class="form-label">Secondary CTA Text</label>{{ form.hero_cta_secondary }}</div>
+    <div class="form-group">
+      <label class="form-label">Hero Headline</label>{{ form.hero_headline }}
+      {% if form.hero_headline.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.hero_headline.errors.0 }}</p>{% endif %}
     </div>
-    <div class="form-group"><label class="form-label">SEO Title</label>{{ form.seo_title }}</div>
-    <div class="form-group"><label class="form-label">SEO Description</label>{{ form.seo_description }}</div>
-    <div class="form-group"><label class="form-label">SEO Keywords</label>{{ form.seo_keywords }}</div>
+    <div class="form-group">
+      <label class="form-label">Hero Subheadline</label>{{ form.hero_subheadline }}
+      {% if form.hero_subheadline.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.hero_subheadline.errors.0 }}</p>{% endif %}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div class="form-group">
+        <label class="form-label">Primary CTA Text</label>{{ form.hero_cta_primary }}
+        {% if form.hero_cta_primary.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.hero_cta_primary.errors.0 }}</p>{% endif %}
+      </div>
+      <div class="form-group">
+        <label class="form-label">Secondary CTA Text</label>{{ form.hero_cta_secondary }}
+        {% if form.hero_cta_secondary.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.hero_cta_secondary.errors.0 }}</p>{% endif %}
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Hero Video URL (optional — must start with http:// or https://, or leave blank)</label>{{ form.hero_video_url }}
+      {% if form.hero_video_url.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.hero_video_url.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">Footer Description</label>{{ form.footer_description }}
+      {% if form.footer_description.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.footer_description.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">SEO Title</label>{{ form.seo_title }}
+      {% if form.seo_title.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.seo_title.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">SEO Description</label>{{ form.seo_description }}
+      {% if form.seo_description.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.seo_description.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">SEO Keywords</label>{{ form.seo_keywords }}
+      {% if form.seo_keywords.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.seo_keywords.errors.0 }}</p>{% endif %}
+    </div>
   </div>
 
   <div class="card" style="margin-bottom:1.25rem;">
     <div class="card-header"><span class="card-title">Social Links</span></div>
-    <div class="form-group"><label class="form-label">Facebook</label>{{ form.social_facebook }}</div>
-    <div class="form-group"><label class="form-label">Instagram</label>{{ form.social_instagram }}</div>
-    <div class="form-group"><label class="form-label">TikTok</label>{{ form.social_tiktok }}</div>
+    <div class="form-group">
+      <label class="form-label">Facebook</label>{{ form.social_facebook }}
+      {% if form.social_facebook.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.social_facebook.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">Instagram</label>{{ form.social_instagram }}
+      {% if form.social_instagram.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.social_instagram.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">TikTok</label>{{ form.social_tiktok }}
+      {% if form.social_tiktok.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.social_tiktok.errors.0 }}</p>{% endif %}
+    </div>
   </div>
 
   <div class="card" style="margin-bottom:1.25rem;">
     <div class="card-header"><span class="card-title">About Page</span></div>
-    <div class="form-group"><label class="form-label">About Title</label>{{ form.about_title }}</div>
-    <div class="form-group"><label class="form-label">About Description</label>{{ form.about_description }}</div>
-    <div class="form-group"><label class="form-label">Mission</label>{{ form.about_mission }}</div>
-    <div class="form-group"><label class="form-label">Vision</label>{{ form.about_vision }}</div>
-    <div class="form-group"><label class="form-label">Registration No.</label>{{ form.registration_no }}</div>
+    <div class="form-group">
+      <label class="form-label">About Title</label>{{ form.about_title }}
+      {% if form.about_title.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.about_title.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">About Description</label>{{ form.about_description }}
+      {% if form.about_description.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.about_description.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mission</label>{{ form.about_mission }}
+      {% if form.about_mission.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.about_mission.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">Vision</label>{{ form.about_vision }}
+      {% if form.about_vision.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.about_vision.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="form-group">
+      <label class="form-label">Registration No.</label>{{ form.registration_no }}
+      {% if form.registration_no.errors %}<p style="color:var(--danger);font-size:.78rem;">{{ form.registration_no.errors.0 }}</p>{% endif %}
+    </div>
   </div>
 
   <button type="submit" class="btn btn-primary">Save Settings</button>
